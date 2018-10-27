@@ -73,7 +73,6 @@ def get_txids(utxos,withdraw_address):
 
     return txids
 
-
 def get_block_count():
     p = RpcConnect.msocket
     out = run_command("info", [""], bprint=0)
@@ -130,7 +129,7 @@ def tassert(cond, msg=None, api=None):
             raise Exception(msg)
 
 def get_senator_addr():
-    out = run_command("list_all_senators", ["", 15])
+    out = run_command("list_senator_members", ["", 100])
     res = result_from_out(out)
     senators = []
     for senator in res:
@@ -214,7 +213,16 @@ def get_hotcold_senator_name(index,type):
     random.shuffle(senators)
     return senators
 
-
+def approve_proposal(senator):
+    out = run_command("get_proposal_for_voter", [senator])
+    result = result_from_out(out)
+    id = result[0]["id"]
+    senators = get_senator_addr()
+    params = {
+        "key_approvals_to_add": senators
+    }
+    out = run_command("approve_proposal", ["senator0", id, params, True])
+    sleep_until_nextblock()
 
 if __name__ == '__main__':
     print  create_account("hzkai111")

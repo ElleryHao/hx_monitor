@@ -67,21 +67,29 @@ def deploy_first_contract() :
                                    "multisignature_contract,3,2,HXNUWGgmxyLy1VpXN3F6vEVWWTL86negEi46,HXNURNJN62g2N9AAxQx5FKSuJrtCq3sexD9v,HXNZvmcErDutQsCTziWq72i7TR92TpoHs6yrx"])
     sleep_until_nextblock()
 
+def appointed_publisher() :
+    for symbol in ConfigInfo.symbols:
+        run_command("senator_appointed_publisher",[ConfigInfo.senator_account,"1.2.31",symbol.symbol,1000,True])
+        sleep_seconds(1)
+    sleep_until_nextblock()
+    approve_proposal(ConfigInfo.senator_account)
 
 
 if __name__ == '__main__':
     # create symbols
-
     for symbol in ConfigInfo.symbols :
         senator_create_symbols(symbol.symbol,symbol.precision,symbol.supply,symbol.fee)
         sleep_seconds(1)
     #update multisignature for all symbols we need but ETH
     update_multisig_address()
     sleep_until_nextblock()
-
     #register contract
     deploy_first_contract()
     sleep_until_nextblock()
+    # add publisher
+    appointed_publisher()
+
+
 
 
 
