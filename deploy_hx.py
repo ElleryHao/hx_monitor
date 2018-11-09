@@ -16,7 +16,7 @@ from ConfigInfo import *
 def senator_update_asset(type):
     senators = get_all_senators()
     for senator in senators:
-        out = run_command("update_asset_private_keys", [senator[0], type, True])
+        out = run_command("update_asset_private_keys", [senator[0],type, senator[0]+'.txt',"12345678" ,True])
     sleep_until_nextblock()
 
 
@@ -42,7 +42,7 @@ def update_multisig_address() :
                                                             hot_cold["cold"], "10000", True])
         # 之前没加这里的sleep 发现 effectnum会回滚的问题
         sleep_until_nextblock()
-        out = run_command("get_proposal_for_voter", ["senator0"])
+        out = run_command("get_proposal_for_voter", [ConfigInfo.senator_account])
         result = result_from_out(out)
         id = result[0]["id"]
         senators = get_hotcold_senator_addr_byaddress(hot_cold["hot"], type)
@@ -55,6 +55,7 @@ def update_multisig_address() :
         res = result_from_out(out)
         print res
 def deploy_first_contract() :
+    print "deploy first contract ..."
     contract_id = run_command("get_first_contract_address",[])
     contract_id = result_from_out(contract_id)
     contract_info = run_command("get_contract_info",[contract_id])
@@ -63,19 +64,20 @@ def deploy_first_contract() :
         return
     run_command("register_contract",[ConfigInfo.caller_name,ConfigInfo.gas_price,ConfigInfo.gas_limit,ConfigInfo.gpc_path])
     sleep_until_nextblock()
-    run_command("invoke_contract",[ConfigInfo.caller_name,ConfigInfo.gas_price,ConfigInfo.gas_limit,contract_id,"init_config",
-                                   "multisignature_contract,3,2,HXNUWGgmxyLy1VpXN3F6vEVWWTL86negEi46,HXNURNJN62g2N9AAxQx5FKSuJrtCq3sexD9v,HXNZvmcErDutQsCTziWq72i7TR92TpoHs6yrx"])
-    sleep_until_nextblock()
+    #run_command("invoke_contract",[ConfigInfo.caller_name,ConfigInfo.gas_price,ConfigInfo.gas_limit,contract_id,"init_config",
+    #                               "multisignature_contract,3,2,HXNUWGgmxyLy1VpXN3F6vEVWWTL86negEi46,HXNURNJN62g2N9AAxQx5FKSuJrtCq3sexD9v,HXNZvmcErDutQsCTziWq72i7TR92TpoHs6yrx"])
 
 def appointed_publisher() :
+    print "appoint publisher ...."
     for symbol in ConfigInfo.symbols:
         run_command("senator_appointed_publisher",[ConfigInfo.senator_account,"1.2.31",symbol.symbol,1000,True])
-        sleep_seconds(1)
-    sleep_until_nextblock()
-    approve_proposal(ConfigInfo.senator_account)
+        sleep_until_nextblock()
+        approve_proposal(ConfigInfo.senator_account)
+
 
 
 if __name__ == '__main__':
+
     # create symbols
     for symbol in ConfigInfo.symbols :
         senator_create_symbols(symbol.symbol,symbol.precision,symbol.supply,symbol.fee)
@@ -84,6 +86,7 @@ if __name__ == '__main__':
     update_multisig_address()
     sleep_until_nextblock()
     #register contract
+
     deploy_first_contract()
     sleep_until_nextblock()
     # add publisher

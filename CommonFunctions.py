@@ -79,6 +79,12 @@ def get_block_count():
     result = result_from_out(out)
     return result['head_block_num']
 
+def get_private_key(account):
+    p = RpcConnect.msocket
+    out = run_command("dump_private_key", [account])
+    result = result_from_out(out)
+    return result[0][1]
+
 def get_account_address(account):
     p = RpcConnect.msocket
     out = run_command("get_account", [account])
@@ -153,7 +159,7 @@ def get_proposal_for_voter_id_list(account):
     return ids
 
 def get_miner_addr():
-    out = run_command("list_miners", ["", 100])
+    out = run_command("list_citizens", ["", 100])
     res = result_from_out(out)
     miners = []
     for miner in res:
@@ -162,6 +168,11 @@ def get_miner_addr():
         miners.append(res["addr"])
     random.shuffle(miners)
     return miners
+
+def get_miners():
+    out = run_command("list_citizens", ["", 100])
+    res = result_from_out(out)
+    return res
 
 def get_all_senators():
     out = run_command("list_senator_members", ["", 15])

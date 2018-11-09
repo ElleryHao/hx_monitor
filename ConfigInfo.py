@@ -38,14 +38,14 @@ class ConfigInfo():
     link_url = "http://127.0.0.1:8091"
     Link_senator = "lktest002"
     lock_account = "lklock"
-    senator_account = "senator0"
+    senator_account = "aquila"
     miner_account ="citizen0"
 
     lock_contract_account=["lock1","lock2","lock3"]
     lock_contract_n = 3
-    symbols =[chainType("BTC",8,210000000,100000),chainType("LTC",8,840000000,100000),chainType("HC",8,860000000,1000000),chainType("ETH",8,10000000000,2500000)]
+    symbols =  [chainType("BTC",8,210000000,100000),chainType("LTC",8,840000000,100000),chainType("HC",8,860000000,1000000),chainType("ETH",8,10000000000,2500000)]
 
-    caller_name = "nathan"
+    caller_name = "hyper-exchange"
     BTC_account_name = "lktest001"
     gas_price = "0.001"
     gas_limit = 10000
