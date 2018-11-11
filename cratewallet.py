@@ -14,6 +14,6 @@ def export_private(type ):#miner or guard)
         prk = get_private_key(name)
         print name ," ",prk
 if __name__ == '__main__':
-    export_private('citizen')
-    #export_private('senator')
+    #export_private('citizen')
+    export_private('senator')
 

@@ -11,6 +11,16 @@ def update_asset(type):
         out = run_command("update_asset_private_keys", [senator[0], type, True])
     sleep_until_nextblock()
 
+def vote() :
+    ids = get_proposal_for_voter_id_list(ConfigInfo.senator_account)
+    vec = {}
+    senators = get_senator_addr()
+    senators.remove("HXNcrswvwQa8asEdNAWYMQGxaEqAGDCqiZce")
+    senators.remove("HXNgaNKK88asWCCkKMgRCkM5Pz47hxEjnfcf")
+    vec["key_approvals_to_add"] = senators
+    for id in ids:
+        run_command("approve_proposal", [ConfigInfo.senator_account, id, vec, True])
+
 
 def create_senator(account):
     ret = get_account_address(account)
@@ -71,6 +81,8 @@ def senator_sign_transaction() :
     for (type,txid) in txids_after:
         senators = get_hotcold_senator_name(index, type)
         for gud in senators:
+            if is_my_account(gud) is False :
+                continue
             out = run_command("senator_sign_crosschain_transaction", [txid, gud])
     sleep_until_nextblock()
 

@@ -44,7 +44,7 @@ class ConfigInfo():
     lock_contract_account=["lock1","lock2","lock3"]
     lock_contract_n = 3
     symbols =  [chainType("BTC",8,210000000,100000),chainType("LTC",8,840000000,100000),chainType("HC",8,860000000,1000000),chainType("ETH",8,10000000000,2500000)]
-
+    cold_wallet = "coldwallet.txt"
     caller_name = "hyper-exchange"
     BTC_account_name = "lktest001"
     gas_price = "0.001"

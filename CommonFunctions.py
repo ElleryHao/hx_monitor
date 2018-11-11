@@ -173,7 +173,12 @@ def get_miners():
     out = run_command("list_citizens", ["", 100])
     res = result_from_out(out)
     return res
-
+def is_my_account(acc) :
+    out = run_command("dump_private_key",[acc])
+    result = result_from_out(out)
+    if result is None :
+        return False
+    return True
 def get_all_senators():
     out = run_command("list_senator_members", ["", 15])
     res = result_from_out(out)
