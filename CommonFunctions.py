@@ -73,6 +73,21 @@ def get_txids(utxos,withdraw_address):
 
     return txids
 
+def get_balances(account):
+    out = run_command("get_account_balances", [account], bprint=0)
+    result = result_from_out(out)
+    return result
+def get_citizen(account) :
+    out = run_command("get_citizen",[account],bprint=0)
+    result = result_from_out(out)
+    return result
+
+def get_payback_balances(account):
+    addr = get_account_address(account)
+    out = run_command("get_address_pay_back_balance",[addr,""])
+    result = result_from_out(out)
+    return result
+
 def get_block_count():
     p = RpcConnect.msocket
     out = run_command("info", [""], bprint=0)
@@ -81,8 +96,10 @@ def get_block_count():
 
 def get_private_key(account):
     p = RpcConnect.msocket
+    print "account is ",account
     out = run_command("dump_private_key", [account])
     result = result_from_out(out)
+    print  "result is ",result
     return result[0][1]
 
 def get_account_address(account):
@@ -157,7 +174,19 @@ def get_proposal_for_voter_id_list(account):
         ids.append(proposal["id"])
 
     return ids
-
+def sort_by_account_id(accounts) :
+    acc_ids = []
+    for acc in accounts :
+        out = run_command("get_account_id",[acc])
+        res = result_from_out(out)
+        acc_ids.append(res)
+    acc_ids.sort(reverse=True)
+    acc_name = []
+    for id in acc_ids:
+        out = run_command("get_account", [id])
+        res = result_from_out(out)
+        acc_name.append(res["name"])
+    return acc_name
 def get_miner_addr():
     out = run_command("list_citizens", ["", 100])
     res = result_from_out(out)
@@ -182,7 +211,11 @@ def is_my_account(acc) :
 def get_all_senators():
     out = run_command("list_senator_members", ["", 15])
     res = result_from_out(out)
-    return res
+    accounts = []
+    for r in res :
+        accounts.append(r[0])
+    return sort_by_account_id(accounts)
+
 def get_multisig_account_pair(index,type):
 
     out = run_command("get_multisig_account_pair", [type],1)

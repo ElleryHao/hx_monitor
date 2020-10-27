@@ -35,7 +35,7 @@ class ConfigInfo():
     ub_url = "http://192.168.1.124:23466"
 
 
-    link_url = "http://127.0.0.1:8091"
+    link_url = "http://127.0.0.1:50321"
     Link_senator = "lktest002"
     lock_account = "lklock"
     senator_account = "aquila"

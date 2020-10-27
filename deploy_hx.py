@@ -12,11 +12,14 @@ there will be several steps to be completed
 from base_core import *
 from CommonFunctions import *
 from ConfigInfo import *
+from guard import *
+
 
 def senator_update_asset(type):
     senators = get_all_senators()
+    print senators
     for senator in senators:
-        out = run_command("update_asset_private_keys", [senator[0],type, senator[0]+'.txt',"12345678" ,True])
+        out = run_command("update_asset_private_keys", [senator[0],type, ConfigInfo.cold_wallet,"12345678" ,True])
     sleep_until_nextblock()
 
 
@@ -75,22 +78,50 @@ def appointed_publisher() :
         approve_proposal(ConfigInfo.senator_account)
 
 
+def test():
+    #run
+    out = run_command("",[3])
+    result = result_from_out(out)
+    print result
 
 if __name__ == '__main__':
 
     # create symbols
-    for symbol in ConfigInfo.symbols :
-        senator_create_symbols(symbol.symbol,symbol.precision,symbol.supply,symbol.fee)
-        sleep_seconds(1)
+    #for symbol in ConfigInfo.symbols :
+    #    senator_create_symbols(symbol.symbol, symbol.precision, symbol.supply, symbol.fee)
+    #    sleep_until_nextblock()
+
+    #vote()
     #update multisignature for all symbols we need but ETH
-    update_multisig_address()
-    sleep_until_nextblock()
+    #update_multisig_address()
+    #sleep_until_nextblock()
     #register contract
 
-    deploy_first_contract()
-    sleep_until_nextblock()
+    #deploy_first_contract()
+    #sleep_until_nextblock()
     # add publisher
-    appointed_publisher()
+    #appointed_publisher()
+    symbols = ["BTC","BCH","USDT","HC","LTC"]
+    senators=get_all_senators()
+    for symbol in symbols :
+        for senator in senators:
+            name = senator
+            if name == "dd123" :
+                name = "ara"
+            out = run_command("get_account", [name])
+            result = result_from_out(out)
+            acc = result.get("id")
+            name = result.get("name")
+            if name == "ara" :
+                name = "dd123"
+            out = run_command("get_current_multi_address_obj", [symbol, acc])
+            result = result_from_out(out)
+            if name == "dd123" :
+                print "update_asset_private_with_keys ", name + " " + symbol + " " +"newaddr_hot"+ " " + "newpubkey_hot" + " " + "new_address_cold"+ " " + "new_pubkey_cold" + " " + "true"
+            else:
+                print "update_asset_private_with_keys ", name + " " + symbol +" "+ result.get(
+                "new_address_hot") + " " + result.get("new_pubkey_hot") + " " + result.get(
+               "new_address_cold") + " " + result.get("new_pubkey_cold") + " " + "true"
 
 
 
